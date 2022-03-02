@@ -1,7 +1,27 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { Button } from '@mui/material'
+import { logoutUser } from '../_actions/user_action'
+import Auth from '../hoc/auth'
+
+import axios from 'axios'
 
 function LandingPage() {
+    const dispatch = useDispatch()
+
+    const logoutHandler = async () => {
+        // await dispatch(logoutUser())
+        try {
+            await axios.post('/api/users/logout')
+            alert('로그아웃 되었습니다.')
+        } catch (e) {
+            alert('Error')
+        }
+
+        
+    }
+
   return (
     <div>
         LandingPage
@@ -13,8 +33,11 @@ function LandingPage() {
         <Link to='/map'>map</Link>
         <br/>
         <Link to='/profile'>profile</Link>
+        <br/>
+
+        <Button variant='contained' onClick={logoutHandler}>Logout</Button>
     </div>
   )
 }
 
-export default LandingPage
+export default Auth(LandingPage, null)

@@ -3,9 +3,13 @@ const User = require('../models/user')
 
 const auth = async (req, res, next) => {
     try {
-        const token = req.header('Authorization').replace('Bearer ', '')
+        // console.log(req)
+        // const token = req.header('Authorization').replace('Bearer ', '')
+        
+        const token = req.cookies.x_auth    // req.cookies를 쓰는데 cookie-parser가 필요한거구나
         const decoded = jwt.verify(token, 'basketball')
-        const user = await User.findOne({ _id: decoded._id, 'tokens.token': token})
+        const user = await User.findOne({ _id: decoded._id, 'tokens.token': token })
+
         if (!user) {
             throw new Error()
         }
@@ -14,7 +18,7 @@ const auth = async (req, res, next) => {
         req.token = token
         next()
     } catch (e) {
-        res.status(401).send({ error: 'Please authenticate.' })
+        res.send({ isAuth: false, error: 'Please authenticate.' })
     }
 }
 

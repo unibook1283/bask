@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema({
         trim: true,
         minlength: 7
     },
+    role: {
+        type: Number,
+        default: 0
+    },
     tokens: [{
         token: {
             type: String,

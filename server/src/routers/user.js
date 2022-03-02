@@ -6,8 +6,10 @@ const auth = require('../middleware/auth')
 router.post('/api/users/register', async (req, res) => {
     const user = new User(req.body)
     try {
-        const token = await user.generateAuthToken()
-        res.status(201).send({ user, token })
+        // const token = await user.generateAuthToken()
+        // res.status(201).send({ user, token })
+        await user.save()
+        res.status(201).send(user)
     } catch (e) {
         res.status(400).send(e)
     }
@@ -39,7 +41,7 @@ router.post('/api/users/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
         const token = await user.generateAuthToken()
-        res.send({ user, token })
+        res.cookie('x_auth', token).send({ user, token })
     } catch (e) {
         res.status(400).send(e)
     }
@@ -55,7 +57,7 @@ router.post('/api/users/logout', auth, async (req, res) => {
     }
 })
 
-router.post('/api/users/logoutAll', auth, async (req, res) => {
+router.post('/api/users/logoutAll', auth, async (req, res) => { // 다른 기기로 로그인하는 걸 고려한건가
     try {
         req.user.tokens = []
         await req.user.save()
@@ -72,6 +74,16 @@ router.delete('/api/users/me', auth, async (req, res) => {
     } catch (e) {
         res.status(500).send()
     }
+})
+
+router.get('/api/users/auth', auth, (req, res) => {
+    res.send({
+        name: req.user.name,
+        email: req.user.email,
+        isAdmin: req.user.role === 0 ? false : true,
+        isAuth: true,
+        role: req.user.role
+    })
 })
 
 module.exports = router

@@ -4,6 +4,9 @@ import axios from 'axios'
 import styled from 'styled-components'
 import { Link, TextField, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { registerUser } from '../_actions/user_action'
+import Auth from '../hoc/auth'
 
 const PageWrap = styled.div`
     display: flex;
@@ -25,6 +28,7 @@ const Inputs = styled.div`
 
 function RegisterPage() {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -57,7 +61,10 @@ function RegisterPage() {
             password
         }
         try {
-            await axios.post('/api/users/register', body)
+            await dispatch(registerUser(body))
+
+
+            // await axios.post('/api/users/register', body)
             alert('회원가입 완료')
             navigate('/login')
         } catch (e) {
@@ -82,4 +89,4 @@ function RegisterPage() {
   )
 }
 
-export default RegisterPage
+export default Auth(RegisterPage, false)

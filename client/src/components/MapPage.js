@@ -9,6 +9,7 @@ import PersonIcon from '@mui/icons-material/Person'
 import HomeIcon from '@mui/icons-material/Home'
 import { spacing } from '@mui/system'
 import { useParams, useNavigate } from 'react-router-dom'
+import Auth from '../hoc/auth'
 
 const PageWrap = styled.div`
     display: flex;
@@ -77,14 +78,13 @@ function MapPage() {
         } 
     }
 
-    async function fetchData () {
-        console.log('position: ' + position.lat + ' ' + position.lng)
+    async function fetchData () {   // 이것도 redux로 해야되나?
         let url = `https://dapi.kakao.com/v2/local/search/keyword.json?query=농구장&y=${position.lat}&x=${position.lng}&radius=20000`
         try {
             const response = await axios.get(url, {
                 headers: {
                     'Authorization': `KakaoAK ${process.env.REACT_APP_KAKAO_API_KEY}`
-                }
+            }
             })
             console.log(response.data.documents)
             setData(response.data.documents)    // module화 하고싶은데 setData를 어찌 처리할지 고민중
@@ -198,4 +198,4 @@ function MapPage() {
   )
 }
 
-export default MapPage
+export default Auth(MapPage, null)

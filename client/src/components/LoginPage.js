@@ -4,6 +4,9 @@ import axios from 'axios'
 import styled from 'styled-components'
 import { Link, TextField, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { loginUser } from '../_actions/user_action'
+import Auth from '../hoc/auth'
 
 const PageWrap = styled.div`
     display: flex;
@@ -25,6 +28,7 @@ const Inputs = styled.div`
 
 function LoginPage() {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -42,9 +46,14 @@ function LoginPage() {
             email,
             password
         }
+        
+        
         try {
-            const data = await axios.post('/api/users/login', body)
-            navigate('/')
+            // const data = await axios.post('/api/users/login', body)
+            // navigate('/')
+
+            const data = await dispatch(loginUser(body))
+            navigate ('/')
         } catch (e) {
             alert('Error')
         }
@@ -66,4 +75,4 @@ function LoginPage() {
   )
 }
 
-export default LoginPage
+export default Auth(LoginPage, false)

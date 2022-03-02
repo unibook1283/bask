@@ -2,7 +2,6 @@ import React from 'react'
 import axios from 'axios'
 import { useEffect } from 'react'
 
-
 function Test() {
 
     // async function fetchData () {
@@ -57,7 +56,7 @@ function Test() {
 
   return (
     <div>
-        
+        test
     </div>
   )
 }

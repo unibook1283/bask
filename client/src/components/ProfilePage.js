@@ -1,4 +1,5 @@
 import React from 'react'
+import Auth from '../hoc/auth'
 
 function ProfilePage() {
   return (
@@ -6,4 +7,4 @@ function ProfilePage() {
   )
 }
 
-export default ProfilePage
+export default Auth(ProfilePage, true)
