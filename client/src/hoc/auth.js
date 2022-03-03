@@ -17,7 +17,6 @@ export default function (SpecificComponent, option, adminRoute = null) {
 
         useEffect(() => {
             dispatch(auth()).then((data) => {
-                console.log(data)
                 // 로그인 안한 유저
                 if (!data.payload.isAuth) {
                     if (option) {
@@ -28,7 +27,7 @@ export default function (SpecificComponent, option, adminRoute = null) {
                     if (adminRoute && !data.payload.isAdmin) {
                         navigate('/')
                     } else {
-                        if (!option) {
+                        if (option === false) {
                             navigate('/')
                         }
                     }

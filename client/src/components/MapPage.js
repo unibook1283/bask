@@ -124,14 +124,15 @@ function MapPage() {
     }
 
     const favoriteHandler = async () => {
-        const filterdDetail = detail    // 이것좀 깔끔하게 해보자
-        delete filterdDetail.category_group_code
-        delete filterdDetail.category_group_name
-        delete filterdDetail.category_name
-        delete filterdDetail.distance
-        delete filterdDetail.phone
-        delete filterdDetail.place_url
-        // delete filterdDetail[
+        // 이것좀 깔끔하게 해보자
+        delete detail.category_group_code
+        delete detail.category_group_name
+        delete detail.category_name
+        delete detail.distance
+        delete detail.phone
+        delete detail.place_url
+
+        // delete detail[
         //     'category_group_code',
         //     'category_group_name',
         //     'cateogry_name',
@@ -139,7 +140,8 @@ function MapPage() {
         //     'phone',
         //     'place_url'
         // ]
-        console.log(filterdDetail)
+        
+        // console.log(filterdDetail)
 
         try {
             await axios.post('/api/favorites/add', detail)

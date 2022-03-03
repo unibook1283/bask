@@ -13,13 +13,11 @@ function LandingPage() {
     const logoutHandler = async () => {
         // await dispatch(logoutUser())
         try {
-            await axios.post('/api/users/logout')
+            await dispatch(logoutUser())
             alert('로그아웃 되었습니다.')
         } catch (e) {
             alert('Error')
         }
-
-        
     }
 
   return (
