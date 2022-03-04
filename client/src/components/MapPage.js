@@ -10,6 +10,8 @@ import HomeIcon from '@mui/icons-material/Home'
 import { spacing } from '@mui/system'
 import { useParams, useNavigate } from 'react-router-dom'
 import Auth from '../hoc/auth'
+import { useDispatch } from 'react-redux'
+import { addFavorite } from '../_actions/favorite_action'
 
 const PageWrap = styled.div`
     display: flex;
@@ -50,6 +52,7 @@ const RoadAddressName = styled.h2`
 function MapPage() {
     let { address, id } = useParams()
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const [data, setData] = useState([])
     const [searchText, setSearchText] = useState('성수동')
@@ -86,7 +89,6 @@ function MapPage() {
                     'Authorization': `KakaoAK ${process.env.REACT_APP_KAKAO_API_KEY}`
             }
             })
-            console.log(response.data.documents)
             setData(response.data.documents)    // module화 하고싶은데 setData를 어찌 처리할지 고민중
             
         } catch (e) {
@@ -131,23 +133,11 @@ function MapPage() {
         delete detail.distance
         delete detail.phone
         delete detail.place_url
-
-        // delete detail[
-        //     'category_group_code',
-        //     'category_group_name',
-        //     'cateogry_name',
-        //     'distance',
-        //     'phone',
-        //     'place_url'
-        // ]
-        
-        // console.log(filterdDetail)
-
         try {
-            await axios.post('/api/favorites/add', detail)
+            await dispatch(addFavorite(detail))
             alert('즐겨찾기에 추가되었습니다.')
         } catch (e) {
-            alert('즐겨찾기 추가에 실패했습니다.')
+            alert(e.response.data.errorMessage)
         }
     }
 
