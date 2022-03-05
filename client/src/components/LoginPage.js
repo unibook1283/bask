@@ -14,7 +14,7 @@ const PageWrap = styled.div`
     justify-content: center;
     align-items: center;
     width: 100vw;
-    height: 100vh;
+    height: 90vh;
 `
 
 const LoginWrap = styled.div`

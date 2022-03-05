@@ -49,6 +49,10 @@ const RoadAddressName = styled.h2`
     font-weight: 200;
 `
 
+const Buttons = styled.div`
+
+`
+
 function MapPage() {
     let { address, id } = useParams()
     const navigate = useNavigate()
@@ -160,8 +164,13 @@ function MapPage() {
                 <PlaceName>{id && detail.place_name}</PlaceName>
                 <RoadAddressName>{id && detail.road_address_name}</RoadAddressName>
             </HeaderInfo>
-            <Button href={detail.place_url} variant='contained' sx={{ mx: 2, width: 350 }} >카카오맵에서 검색</Button>
-            <Button variant='contained' sx={{ mx: 2, my: 1, width: 350 }} onClick={favoriteHandler} >즐겨찾기에 추가</Button>
+            {detail.id && (
+                <Buttons>
+                <Button href={detail.place_url} variant='contained' sx={{ mx: 2, width: 350 }} >카카오맵에서 검색</Button>
+                <Button variant='contained' sx={{ mx: 2, my: 1, width: 350 }} onClick={favoriteHandler} >즐겨찾기에 추가</Button>
+                </Buttons>
+            )}
+            
         </InfoWrap>
         <RenderAfterNavermapsLoaded
             ncpClientId={'uekcztg8vy'}
