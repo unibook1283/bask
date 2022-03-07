@@ -18,7 +18,7 @@ const auth = async (req, res, next) => {
         req.token = token
         next()
     } catch (e) {
-        res.send({ isAuth: false, error: 'Please authenticate.' })
+        res.send({ isAuth: false, errorMessage: '로그인 후 사용하실 수 있습니다.' })
     }
 }
 

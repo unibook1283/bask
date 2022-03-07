@@ -1,17 +1,14 @@
 import React from 'react'
-import { RenderAfterNavermapsLoaded, NaverMap, Marker } from 'react-naver-maps'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { TextField, Button } from '@mui/material'
-import IconButton from '@mui/material/IconButton'
-import PersonIcon from '@mui/icons-material/Person'
-import HomeIcon from '@mui/icons-material/Home'
-import { spacing } from '@mui/system'
+import { TextField, Button, Link, Modal, Box } from '@mui/material'
 import { useParams, useNavigate } from 'react-router-dom'
-import Auth from '../hoc/auth'
+import Auth from '../../hoc/auth'
 import { useDispatch } from 'react-redux'
-import { addFavorite } from '../_actions/favorite_action'
+import { addFavorite } from '../../_actions/favorite_action'
+import Map from './Sections/Map'
+import NewMap from './Sections/NewMap'
 
 const PageWrap = styled.div`
     display: flex;
@@ -19,18 +16,18 @@ const PageWrap = styled.div`
 
 const InfoWrap = styled.div`
     width: 500px;
-    height: 100vh;
+    height: calc(100vh - 65px);
+    display: flex;
+    flex-direction: column;
 `
 
-const TopMenu = styled.div`
-    display: flex;
-    justify-content: space-between;
-    height: 40px;
+const MainInfo = styled.div`
+    flex: auto;
 `
 
 const Search = styled.div`
     display: flex;
-    margin: 0px 10px 10px 10px;
+    margin: 15px 10px 10px 10px;
 `
 
 const HeaderInfo = styled.div`
@@ -50,8 +47,26 @@ const RoadAddressName = styled.h2`
 `
 
 const Buttons = styled.div`
-
+    width: 395px;
 `
+
+const RequestCourt = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    align-self: bottom;
+`
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
 function MapPage() {
     let { address, id } = useParams()
@@ -65,6 +80,7 @@ function MapPage() {
         lng: 127.04965
     })
     const [detail, setDetail] = useState({})
+    const [open, setOpen] = useState(false)
 
     async function geocode (address) {
         let url = `/map-geocode/v2/geocode?query=${address}`
@@ -115,20 +131,7 @@ function MapPage() {
     const moveHandler = () => {
         navigate(`/map/${searchText}`)
     }
-
-    const markerClicked = (elem) => {
-        setDetail(elem)
-        navigate(`/map/${searchText}/${elem.id}`)
-    }
-
-    const goHome = () => {
-        navigate('/')
-    }
-
-    const goProfile = () => {
-        navigate('/profile')
-    }
-
+    
     const favoriteHandler = async () => {
         // 이것좀 깔끔하게 해보자
         delete detail.category_group_code
@@ -138,7 +141,11 @@ function MapPage() {
         delete detail.phone
         delete detail.place_url
         try {
-            await dispatch(addFavorite(detail))
+            const res = await dispatch(addFavorite(detail))
+            if (res.payload.isAuth === false) {
+                alert(res.payload.errorMessage)
+                return
+            }
             alert('즐겨찾기에 추가되었습니다.')
         } catch (e) {
             alert(e.response.data.errorMessage)
@@ -148,53 +155,39 @@ function MapPage() {
   return (
     <PageWrap>
         <InfoWrap>
-            <TopMenu>
-                <IconButton size="large" color="primary" onClick={goHome}>
-                    <HomeIcon />
-                </IconButton>
-                <IconButton size="large" color="primary" onClick={goProfile}>
-                    <PersonIcon />
-                </IconButton>
-            </TopMenu>
-            <Search>
-                <TextField fullWidth label='동으로 검색 ex) 성수동' size='small' onChange={searchHandler} />
-                <Button variant='contained' sx={{ml: 1}} onClick={moveHandler} >이동</Button>
-            </Search>
-            <HeaderInfo>
-                <PlaceName>{id && detail.place_name}</PlaceName>
-                <RoadAddressName>{id && detail.road_address_name}</RoadAddressName>
-            </HeaderInfo>
-            {detail.id && (
-                <Buttons>
-                <Button href={detail.place_url} variant='contained' sx={{ mx: 2, width: 350 }} >카카오맵에서 검색</Button>
-                <Button variant='contained' sx={{ mx: 2, my: 1, width: 350 }} onClick={favoriteHandler} >즐겨찾기에 추가</Button>
-                </Buttons>
-            )}
+            <MainInfo>
+                <Search>
+                    <TextField fullWidth label='동으로 검색 ex) 성수동' size='small' onChange={searchHandler} />
+                    <Button variant='contained' sx={{ml: 1}} onClick={moveHandler} >이동</Button>
+                </Search>
+                <HeaderInfo>
+                    <PlaceName>{id && detail.place_name}</PlaceName>
+                    <RoadAddressName>{id && detail.road_address_name}</RoadAddressName>
+                </HeaderInfo>
+                {detail.id && (
+                    <Buttons>
+                        <Button fullWidth href={detail.place_url} variant='contained' sx={{ mx: 2 }} >카카오맵에서 검색</Button>
+                        <Button fullWidth variant='contained' sx={{ mx: 2, my: 1 }} onClick={favoriteHandler} >즐겨찾기에 추가</Button>
+                    </Buttons>
+                )}
+            </MainInfo>
+
+            
+            <RequestCourt>
+                <Button onClick={() => setOpen(true)}>찾으시는 코트가 없나요?</Button>
+                <Modal
+                    open={open}
+                    onClose={() => setOpen(false)}
+
+                >
+                    <Box sx={style}>
+                        qwer
+                    </Box>
+                </Modal>
+            </RequestCourt>
             
         </InfoWrap>
-        <RenderAfterNavermapsLoaded
-            ncpClientId={'uekcztg8vy'}
-            >
-            <NaverMap
-                mapDivId={'maps-getting-started-uncontrolled'}
-                style={{
-                  width: '100%',
-                  height: '100vh',
-                }}
-                defaultCenter={position}
-                defaultZoom={12}
-            >
-                {data.map((elem, index) => {
-                    return (
-                        <Marker 
-                            key={index}
-                            position={{ lat: elem.y, lng: elem.x }}
-                            onClick={() => markerClicked(elem)}
-                        />
-                    )
-                })}
-            </NaverMap>
-        </RenderAfterNavermapsLoaded>
+        <NewMap position={position} data={data} setDetail={setDetail} searchText={searchText} navigate={navigate} />
     </PageWrap>
   )
 }

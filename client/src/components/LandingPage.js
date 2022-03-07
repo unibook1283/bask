@@ -30,7 +30,7 @@ function LandingPage() {
         <br/>
         <Link to='/map'>map</Link>
         <br/>
-        <Link to='/profile'>profile</Link>
+        <Link to='/profile'>favorites</Link>
         <br/>
 
         <Button variant='contained' onClick={logoutHandler}>Logout</Button>

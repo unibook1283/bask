@@ -20,6 +20,7 @@ export default function (SpecificComponent, option, adminRoute = null) {
                 // 로그인 안한 유저
                 if (!data.payload.isAuth) {
                     if (option) {
+                        alert(data.payload.errorMessage)
                         navigate('/login')
                     }
                 } else {

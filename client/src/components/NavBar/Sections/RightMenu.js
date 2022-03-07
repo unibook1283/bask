@@ -19,6 +19,7 @@ function RightMenu() {
         try {
             await dispatch(logoutUser())
             alert('로그아웃 되었습니다.')
+            navigate('/')
         } catch (e) {
             alert('로그아웃에 실패하였습니다.')
         }

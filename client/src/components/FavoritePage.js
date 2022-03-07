@@ -3,7 +3,7 @@ import Auth from '../hoc/auth'
 import { useDispatch } from 'react-redux'
 import { getFavorites, deleteFavorite } from '../_actions/favorite_action'
 import styled from 'styled-components'
-import { List, ListItem, ListItemText, ListItemButton, Divider, Chip, IconButton } from '@mui/material';
+import { List, ListItem, ListItemText, ListItemButton, Divider, Chip, IconButton, Link } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -19,6 +19,11 @@ const FavoriteList = styled.div`
 
 const FavoriteElement = styled.div`
   display: flex;
+`
+
+const Nothing = styled.div`
+  display: flex;
+  justify-content: center;
 `
 
 
@@ -63,6 +68,11 @@ function ProfilePage() {
       <ImageWrap>
         <img src="img/tan-kuen-yuen-cXXuAUCTihQ-unsplash.jpg" width="1000px" height="400px" />
       </ImageWrap>
+      {(favorites.length === 0) && 
+        <Nothing>
+          <Link href='/map'>새로운 농구장 추가하러 가기</Link>
+        </Nothing>
+      }
       <FavoriteList>
         <List sx={{width: 900}}>
           {favorites && favorites.map((elem, index) => {  // favorites가 있을 때만 map 실행.
@@ -85,7 +95,6 @@ function ProfilePage() {
               
             )
           })}
-          
         </List>
       </FavoriteList>
     </div>
