@@ -1,6 +1,7 @@
 const express = require('express')
 const userRouter = require('./routers/user')
 const favoriteRouter = require('./routers/favorite')
+const courtRouter = require('./routers/court')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
 
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 
 app.use(userRouter)
 app.use(favoriteRouter)
+app.use(courtRouter)
 
 app.listen(port, () => {
     console.log(`Server is up on port ${port}`)

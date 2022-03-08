@@ -8,3 +8,6 @@ export const AUTH_USER = "auth_user"
 export const GET_FAVORITES = "get_favorites" 
 export const DELETE_FAVORITE = "delete_favorite"
 export const ADD_FAVORITE = "add_favorite"
+
+// courts
+export const ADD_COURT = "add_court"

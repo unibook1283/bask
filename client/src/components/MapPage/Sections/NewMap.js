@@ -8,13 +8,23 @@ export default class App extends React.Component {
 //     this.state = {};
 //     // console.log(props)
 //   }
-  
+    
+
   render() {
-    const { position, data, setDetail, searchText, navigate } = this.props;
+    const { position, data, setDetail, searchText, navigate, newCourt, setNewCourt } = this.props;
+    // const navermaps = window.naver.maps;
+
     const markerClicked = (elem) => {
         setDetail(elem)
         navigate(`/map/${searchText}/${elem.id}`)
+        console.log(this.mapRef.getCenterPoint());
     }
+
+    const rightClick = (coord) => {
+        console.log('test', coord)
+        setNewCourt({ lat: coord._lat, lng: coord._lng })
+    }
+
     return (
         <RenderAfterNavermapsLoaded
             ncpClientId={'uekcztg8vy'}
@@ -26,8 +36,9 @@ export default class App extends React.Component {
                     height: 'calc(100vh - 65px)',
                 }}
                 defaultCenter={position}
+                onRightclick={pointerEvent => rightClick(pointerEvent.coord)}
                 defaultZoom={12}
-                naverRef={ref => { this.naverMapRef = ref }}
+                naverRef={ref => { this.mapRef = ref }}
             >
                 {data.map((elem, index) => {
                     return (
@@ -38,15 +49,28 @@ export default class App extends React.Component {
                         />
                     )
                 })}
-                <Marker 
-                    position={{ lat: 37.3595704, lng: 127.105399 }}
-                    onClick={() => {
-                        alert('여기는 네이버 입니다.')
-                    }}
-                />
+                {newCourt && (
+                    <Marker
+                        // icon={{
+                        //     // src: '~/client/public/img/basketball.png'
+                        //     // src: '../../../../public/img/basketball.png'
+                        // }}
+                        // animation={navermaps.Animation.BOUNCE}
+                        position={newCourt}
+                        onClick={() => {
+                            alert('newCourt!')
+                        }}
+                    />
+                )}
+                
             </NaverMap>
         </RenderAfterNavermapsLoaded>
     )
   }
+
+//   componentDidMount() {
+//     // map이 생성될 때의 bounds를 알기 위해 method를 이용합니다.
+//     console.log(this.mapRef.getBounds());
+//     }
 }
 

@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux'
 import { addFavorite } from '../../_actions/favorite_action'
 import Map from './Sections/Map'
 import NewMap from './Sections/NewMap'
+import Request from './Sections/Request'
 
 const PageWrap = styled.div`
     display: flex;
@@ -61,7 +62,7 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 500,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -81,6 +82,7 @@ function MapPage() {
     })
     const [detail, setDetail] = useState({})
     const [open, setOpen] = useState(false)
+    const [newCourt, setNewCourt] = useState()
 
     async function geocode (address) {
         let url = `/map-geocode/v2/geocode?query=${address}`
@@ -181,13 +183,13 @@ function MapPage() {
 
                 >
                     <Box sx={style}>
-                        qwer
+                        <Request setOpen={setOpen} newCourt={newCourt} />
                     </Box>
                 </Modal>
             </RequestCourt>
             
         </InfoWrap>
-        <NewMap position={position} data={data} setDetail={setDetail} searchText={searchText} navigate={navigate} />
+        <NewMap position={position} data={data} setDetail={setDetail} searchText={searchText} navigate={navigate} newCourt={newCourt} setNewCourt={setNewCourt} />
     </PageWrap>
   )
 }

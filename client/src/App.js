@@ -11,7 +11,6 @@ import MapPage from './components/MapPage/MapPage'
 import FavoritePage from './components/FavoritePage'
 import Test from './components/Test'
 import NavBar from './components/NavBar/NavBar'
-import Request from './components/Request'
 
 function App() {
   return (
@@ -28,7 +27,6 @@ function App() {
             <Route path="/map/:address/:id" element={<MapPage />} />
             <Route path="/profile" element={<FavoritePage />} />
             {/* <Route path="/test" element={<Test />} /> */}
-            <Route path="/request" element={<Request />} />
           </Routes>
         </div>
         
