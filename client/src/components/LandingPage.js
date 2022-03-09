@@ -32,6 +32,8 @@ function LandingPage() {
         <br/>
         <Link to='/profile'>favorites</Link>
         <br/>
+        <Link to='/admin'>admin</Link>
+        <br/>
 
         <Button variant='contained' onClick={logoutHandler}>Logout</Button>
     </div>

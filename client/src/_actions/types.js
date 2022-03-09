@@ -11,3 +11,5 @@ export const ADD_FAVORITE = "add_favorite"
 
 // courts
 export const ADD_COURT = "add_court"
+export const GET_COURT = "get_court"
+export const DELETE_COURT = "delete_court"

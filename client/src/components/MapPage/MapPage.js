@@ -94,6 +94,7 @@ function MapPage() {
                     'X-NCP-APIGW-API-KEY': process.env.REACT_APP_NAVER_GEOCODE_KEY
                 }
             })
+
             setPosition({
                 lat: response.data.addresses[0].y,
                 lng: response.data.addresses[0].x

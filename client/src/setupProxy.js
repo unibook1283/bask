@@ -22,4 +22,11 @@ module.exports = function(app) {
             changeOrigin: true
         })
     )
+    app.use(
+        '/map-reversegeocode',
+        createProxyMiddleware({
+            target: 'https://naveropenapi.apigw.ntruss.com',
+            changeOrigin: true
+        })
+    )
 }

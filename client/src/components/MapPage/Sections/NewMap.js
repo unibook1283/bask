@@ -67,10 +67,5 @@ export default class App extends React.Component {
         </RenderAfterNavermapsLoaded>
     )
   }
-
-//   componentDidMount() {
-//     // map이 생성될 때의 bounds를 알기 위해 method를 이용합니다.
-//     console.log(this.mapRef.getBounds());
-//     }
 }
 

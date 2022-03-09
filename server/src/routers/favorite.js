@@ -53,7 +53,6 @@ router.get('/api/favorites', auth, async (req, res) => {
 })
 
 router.post('/api/favorites/delete', auth, async (req, res) => {
-    console.log(req.body)
     try {
         // await req.body.remove()
         const favorite = await Favorite.findByIdAndDelete(req.body._id)
