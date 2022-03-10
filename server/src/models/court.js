@@ -5,6 +5,12 @@ const courtSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    address_name: {
+        type: String
+    },
+    road_address_name: {
+        type: String
+    },
     goalposts: {
         type: Number,
         required: true

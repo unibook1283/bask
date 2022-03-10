@@ -2,7 +2,9 @@ import axios from 'axios'
 import {
     ADD_COURT,
     GET_COURT,
-    DELETE_COURT
+    DELETE_COURT,
+    UPDATE_COURT,
+    SEARCHED_COURT
 } from './types'
 
 export function addCourt(dataToSubmit) {
@@ -31,6 +33,26 @@ export function deleteCourt(dataToSubmit) {
 
     return {
         type: DELETE_COURT,
+        payload: request
+    }
+}
+
+export function updateCourt(dataToSubmit) {
+    const request = axios.patch('/api/courts', dataToSubmit)
+        .then(response => response.data)
+
+    return {
+        type: UPDATE_COURT,
+        payload: request
+    }
+}
+
+export function getSearchedCourt(dataToSubmit) {
+    const request = axios.get('/api/courts/valid', dataToSubmit)
+        .then(response => response.data)
+
+    return {
+        type: SEARCHED_COURT,
         payload: request
     }
 }

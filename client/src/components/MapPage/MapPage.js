@@ -10,6 +10,7 @@ import { addFavorite } from '../../_actions/favorite_action'
 import Map from './Sections/Map'
 import NewMap from './Sections/NewMap'
 import Request from './Sections/Request'
+import { getSearchedCourt } from '../../_actions/court_action'
 
 const PageWrap = styled.div`
     display: flex;
@@ -104,7 +105,7 @@ function MapPage() {
         } 
     }
 
-    async function fetchData () {   // 이것도 redux로 해야되나?
+    async function fetchKakaoCourts () {   // 이것도 redux로 해야되나?
         let url = `https://dapi.kakao.com/v2/local/search/keyword.json?query=농구장&y=${position.lat}&x=${position.lng}&radius=20000`
         try {
             const response = await axios.get(url, {
@@ -124,7 +125,7 @@ function MapPage() {
     }, [address])
 
     useEffect(() => {
-        fetchData()
+        fetchKakaoCourts()
     }, [position])
     
     const searchHandler = (e) => {
@@ -154,6 +155,20 @@ function MapPage() {
             alert(e.response.data.errorMessage)
         }
     }
+
+    
+    const fetchDbCourts = async () => {
+        console.log(searchText)
+        try {
+            const dbCourts = await dispatch(getSearchedCourt({searchText: searchText}))
+        } catch (e) {
+            alert('Error')
+        }
+    }
+
+    useEffect(() => {
+        fetchDbCourts()
+    }, [searchText])
 
   return (
     <PageWrap>
@@ -190,7 +205,7 @@ function MapPage() {
             </RequestCourt>
             
         </InfoWrap>
-        <NewMap position={position} data={data} setDetail={setDetail} searchText={searchText} navigate={navigate} newCourt={newCourt} setNewCourt={setNewCourt} />
+        <NewMap position={position} data={data} setDetail={setDetail} searchText={searchText} navigate={navigate} newCourt={newCourt} setNewCourt={setNewCourt} dispatch={dispatch} />
     </PageWrap>
   )
 }

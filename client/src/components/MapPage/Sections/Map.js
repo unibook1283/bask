@@ -29,6 +29,7 @@ function Map(props) {
     const navermaps = window.naver.maps;
     this.setState(() => ({ center : new navermaps.LatLng(128.6521583, 34.9070498) }));
   }
+
   
 
   return (

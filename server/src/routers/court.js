@@ -29,11 +29,33 @@ router.get('/api/courts/unvalid', auth, async (req, res) => {
 })
 
 router.post('/api/courts/delete', auth, async (req, res) => {
-    console.log(req)
     try {
         const court = await Court.findByIdAndDelete(req.body._id)
         console.log(court)
         res.send(court)
+    } catch (e) {
+        res.status(500).send()
+    }
+})
+
+router.patch('/api/courts', auth, async (req, res) => {
+    try {
+        await Court.findByIdAndUpdate(req.body.courtId, req.body)
+        res.send()
+    } catch (e) {
+        res.status(400).send()
+    }
+})
+
+router.get('/api/courts/valid', async (req, res) => {
+    console.log(req.body)
+
+    try {
+        // console.log(req)
+
+        const courts = await Court.find({ address_name: {$regex: req.body.searchText}, valid: true })
+
+        res.send(courts)
     } catch (e) {
         res.status(500).send()
     }

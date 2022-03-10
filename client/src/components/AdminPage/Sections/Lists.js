@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from '@mui/material'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
-import { deleteCourt } from '../../../_actions/court_action'
+import { deleteCourt, updateCourt } from '../../../_actions/court_action'
 
 const ListsWrap = styled.div`
     width: 900px;
@@ -17,8 +17,8 @@ function Lists(props) {
 
     const dispatch = useDispatch()
 
-    async function reverseGeocode (lat, lng) {
-		let url = `/map-reversegeocode/v2/gc?coords=${lat},${lng}&orders=addr,roadaddr&output=json`
+    async function reverseGeocode (court) {
+		let url = `/map-reversegeocode/v2/gc?coords=${court.y},${court.x}&orders=addr,roadaddr&output=json`
 
 		try {
 			const response = await axios.get(url, {
@@ -27,8 +27,25 @@ function Lists(props) {
 					'X-NCP-APIGW-API-KEY': process.env.REACT_APP_NAVER_GEOCODE_KEY
 				}
 			})
-			console.log(response.data.results)
+
+            const update = {
+                courtId: court._id, // findById 하기 위해 넣어줌.
+                valid: true
+            }
+
+            if (response.data.results[0] !== undefined) {
+                const addr = response.data.results[0].region
+                const address_name = addr.area1.alias + ' ' + addr.area2.name + ' ' + addr.area3.name + ' ' + addr.area4.name
+                update.address_name = address_name
+            }
 			
+            if (response.data.results[1] !== undefined) {
+                const roadaddr = response.data.results[1]
+                const road_address_name = roadaddr.region.area1.alias + ' ' + roadaddr.region.area2.name + ' ' + roadaddr.land.name + ' ' + roadaddr.land.number1 + ' ' + roadaddr.land.number2
+                update.road_address_name = road_address_name
+            }
+            
+            await dispatch(updateCourt(update))
 		} catch (e) {
 			console.log(e)
 		} 
@@ -39,12 +56,13 @@ function Lists(props) {
     }
 
     const validateHandler = (court) => {
-        reverseGeocode(court.y, court.x)
+        reverseGeocode(court)
     }
 
     const unvalidateHandler = async (court) => {
         try {
             await dispatch(deleteCourt(court))
+            setOnMapCourt(undefined)
         } catch (e) {
             alert('Error')
         }
@@ -61,6 +79,7 @@ function Lists(props) {
                         <TableCell>바닥</TableCell>
                         <TableCell>골대 높이</TableCell>
                         <TableCell>제보자 id</TableCell>
+                        <TableCell></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -76,9 +95,12 @@ function Lists(props) {
                             <TableCell>{court.floor}</TableCell>
                             <TableCell>{court.height}</TableCell>
                             <TableCell>{court.owner.name}</TableCell>
-                            <Button sx={{mt: 1, mr: 1}} variant='contained' onClick={() => onMapCourtHandler(court)} >지도에서 보기</Button>
-                            <Button sx={{mt: 1, mr: 1}} variant='contained' onClick={() => validateHandler(court)} >추가</Button>
-                            <Button sx={{mt: 1}} variant='contained' onClick={() => unvalidateHandler(court)} >삭제</Button>
+                            <TableCell>
+                                <Button sx={{mr: 1}} variant='contained' onClick={() => onMapCourtHandler(court)} >지도에서 보기</Button>
+                                <Button sx={{mr: 1}} variant='contained' onClick={() => validateHandler(court)} >추가</Button>
+                                <Button variant='contained' onClick={() => unvalidateHandler(court)} >삭제</Button>
+                            </TableCell>
+                            
                         </TableRow>
                     ))}
                 </TableBody>
