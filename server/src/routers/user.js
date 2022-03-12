@@ -11,7 +11,8 @@ router.post('/api/users/register', async (req, res) => {
         await user.save()
         res.status(201).send(user)
     } catch (e) {
-        res.status(400).send(e)
+        console.log(e.message)
+        res.status(400).send(e.message)
     }
 })
 

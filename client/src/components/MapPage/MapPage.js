@@ -17,7 +17,6 @@ const PageWrap = styled.div`
 `
 
 const InfoWrap = styled.div`
-    width: 500px;
     height: calc(100vh - 65px);
     display: flex;
     flex-direction: column;
@@ -28,6 +27,8 @@ const MainInfo = styled.div`
 `
 
 const Search = styled.div`
+    width: 400px;
+
     display: flex;
     margin: 15px 10px 10px 10px;
 `
@@ -49,7 +50,7 @@ const RoadAddressName = styled.h2`
 `
 
 const Buttons = styled.div`
-    width: 395px;
+    width: 387px;
 `
 
 const RequestCourt = styled.div`
@@ -84,6 +85,7 @@ function MapPage() {
     const [detail, setDetail] = useState({})
     const [open, setOpen] = useState(false)
     const [newCourt, setNewCourt] = useState()
+    const [dbc, setDbc] = useState([])
 
     async function geocode (address) {
         let url = `/map-geocode/v2/geocode?query=${address}`
@@ -106,7 +108,7 @@ function MapPage() {
     }
 
     async function fetchKakaoCourts () {   // 이것도 redux로 해야되나?
-        let url = `https://dapi.kakao.com/v2/local/search/keyword.json?query=농구장&y=${position.lat}&x=${position.lng}&radius=20000`
+        let url = `https://dapi.kakao.com/v2/local/search/keyword.json?query=농구장&y=${position.lat}&x=${position.lng}&size=15&page=1&radius=4000`
         try {
             const response = await axios.get(url, {
                 headers: {
@@ -114,7 +116,6 @@ function MapPage() {
             }
             })
             setData(response.data.documents)    // module화 하고싶은데 setData를 어찌 처리할지 고민중
-            
         } catch (e) {
             console.log(e)
         }
@@ -134,6 +135,7 @@ function MapPage() {
 
     const moveHandler = () => {
         navigate(`/map/${searchText}`)
+        fetchDbCourts()
     }
     
     const favoriteHandler = async () => {
@@ -161,6 +163,9 @@ function MapPage() {
         console.log(searchText)
         try {
             const dbCourts = await dispatch(getSearchedCourt({searchText: searchText}))
+
+            console.log(dbCourts.payload)
+            setDbc(dbCourts.payload)
         } catch (e) {
             alert('Error')
         }
@@ -168,7 +173,7 @@ function MapPage() {
 
     useEffect(() => {
         fetchDbCourts()
-    }, [searchText])
+    }, [])
 
   return (
     <PageWrap>
@@ -205,7 +210,7 @@ function MapPage() {
             </RequestCourt>
             
         </InfoWrap>
-        <NewMap position={position} data={data} setDetail={setDetail} searchText={searchText} navigate={navigate} newCourt={newCourt} setNewCourt={setNewCourt} dispatch={dispatch} />
+        <NewMap position={position} data={data} setDetail={setDetail} searchText={searchText} navigate={navigate} newCourt={newCourt} setNewCourt={setNewCourt} dispatch={dispatch} dbc={dbc} />
     </PageWrap>
   )
 }

@@ -47,13 +47,12 @@ router.patch('/api/courts', auth, async (req, res) => {
     }
 })
 
-router.get('/api/courts/valid', async (req, res) => {
-    console.log(req.body)
-
+router.post('/api/courts/valid', async (req, res) => {
     try {
-        // console.log(req)
+        // const courts = await Court.find({ address_name: {$regex: req.body.searchText}, valid: true })
+        // 이것좀 고민해봐라.
+        const courts = await Court.find({ valid: true })
 
-        const courts = await Court.find({ address_name: {$regex: req.body.searchText}, valid: true })
 
         res.send(courts)
     } catch (e) {

@@ -48,7 +48,7 @@ export function updateCourt(dataToSubmit) {
 }
 
 export function getSearchedCourt(dataToSubmit) {
-    const request = axios.get('/api/courts/valid', dataToSubmit)
+    const request = axios.post('/api/courts/valid', dataToSubmit)
         .then(response => response.data)
 
     return {

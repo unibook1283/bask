@@ -10,13 +10,13 @@ export default class App extends React.Component {
 
     render() {
 
-        const { position, data, setDetail, searchText, navigate, newCourt, setNewCourt, dispatch } = this.props;
+        const { position, data, setDetail, searchText, navigate, newCourt, setNewCourt, dispatch, dbc } = this.props;
         // const navermaps = window.naver.maps;
 
         const markerClicked = (elem) => {
             setDetail(elem)
             navigate(`/map/${searchText}/${elem.id}`)
-            console.log(this.mapRef.getCenterPoint());
+            // console.log(this.mapRef.getCenterPoint());
         }
 
         const rightClick = (coord) => {
@@ -24,7 +24,9 @@ export default class App extends React.Component {
             setNewCourt({ lat: coord._lat, lng: coord._lng })
         }
 
-        
+        const dbcMarkerClicked = (elem) => {
+            // 고민좀 해보자.
+        }
         
 
         return (
@@ -64,7 +66,15 @@ export default class App extends React.Component {
                             }}
                         />
                     )}
-                    
+                    {dbc.map((elem, index) => {
+                        return (
+                            <Marker
+                                key={index}
+                                position={{ lat: elem.x, lng: elem.y }}
+                                onClick={() => dbcMarkerClicked(elem)}
+                            />
+                        )
+                    })}
                 </NaverMap>
             </RenderAfterNavermapsLoaded>
         )

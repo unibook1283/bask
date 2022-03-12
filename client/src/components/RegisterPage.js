@@ -32,6 +32,7 @@ function RegisterPage() {
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
 
@@ -41,6 +42,10 @@ function RegisterPage() {
     
     const emailChanged = (e) => {
         setEmail(e.target.value)
+    }
+
+    const phoneNumberChanged = (e) => {
+        setPhoneNumber(e.target.value)
     }
 
     const passwordChanged = (e) => {
@@ -58,17 +63,15 @@ function RegisterPage() {
         let body = {
             name,
             email,
+            phoneNumber,
             password
         }
         try {
-            await dispatch(registerUser(body))
-
-
-            // await axios.post('/api/users/register', body)
+            const response = await dispatch(registerUser(body))
             alert('회원가입 완료')
             navigate('/login')
         } catch (e) {
-            alert('Error')
+            alert(e.response.data)
         }
     }
 
@@ -77,10 +80,11 @@ function RegisterPage() {
         <LoginWrap>
             <h1>Register</h1>
             <Inputs>
-                <TextField required fullWidth label='name' type='' margin='dense' size='small' onChange={nameChanged}/>
+                <TextField required fullWidth label='name' margin='dense' size='small' onChange={nameChanged}/>
                 <TextField required fullWidth label='email' type='email' margin='dense' size='small' onChange={emailChanged}/>
+                <TextField required fullWidth label='phone number' type='tel' margin='dense' size='small' onChange={phoneNumberChanged}/>
                 <TextField required fullWidth label='password' type='password' margin='dense' size='small' onChange={passwordChanged} />
-                <TextField required fullWidth label='confirmPassword' type='password' margin='dense' size='small' onChange={confirmPasswordChanged}/>
+                <TextField required fullWidth label='confirm password' type='password' margin='dense' size='small' onChange={confirmPasswordChanged}/>
             </Inputs>
             
             <Button fullWidth variant='contained' onClick={registerHandler}>Register</Button>

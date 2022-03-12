@@ -27,7 +27,7 @@ function App() {
             <Route path="/map/:address" element={<MapPage />} />
             <Route path="/map/:address/:id" element={<MapPage />} />
             <Route path="/profile" element={<FavoritePage />} />
-            {/* <Route path="/test" element={<Test />} /> */}
+            <Route path="/test" element={<Test />} />
             <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </div>
